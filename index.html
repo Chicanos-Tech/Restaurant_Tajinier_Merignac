@@ -63,9 +63,9 @@
         </form>
 
         <div class="info">
-          ✅ Vous allez être redirigé vers Google pour laisser votre avis.<br>
-          ✅ Après avoir publié, utilisez le bouton retour de votre navigateur.<br>
-          ✅ Puis cliquez sur "Accéder à la roulette" pour tenter de gagner !
+          ✅ Vous serez redirigé vers Google pour laisser votre avis.<br>
+          ✅ Une fois publié, revenez ici avec le bouton retour.<br>
+          ✅ Tentez de gagner un tajine, une boisson ou un dessert !
         </div>
 
         <div class="sep"></div>
@@ -99,8 +99,8 @@
   </div>
 
   <script>
-    const PLACE_ID = 'ChIJ5yphIvDZVA0Rykpm0HohmHA';
-    const reviewUrl = `https://search.google.com/local/writereview?placeid=${PLACE_ID}`;
+    // LIEN DIRECT VERS AVIS GOOGLE - BON PLACE ID
+    const reviewUrl = 'https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA';
     
     document.getElementById('avisForm').addEventListener('submit', (e)=>{
       e.preventDefault();
@@ -112,8 +112,6 @@
       }
 
       localStorage.setItem('lastEmail', email);
-      
-      // REDIRECTION DIRECTE (pas de popup)
       window.location.href = reviewUrl;
     });
 
