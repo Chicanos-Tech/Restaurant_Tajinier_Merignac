@@ -1,120 +1,200 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tajinier Mérignac - Avis & Roulette</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tajinier • Avis & Cadeau</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;transition:.5s}
-    body.step1{background:radial-gradient(circle at top,#fee2e2,#f8fafc)}
-    body.step2{background:radial-gradient(circle at top,#020617,#111827);color:white}
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Inter,sans-serif;
+  min-height:100vh;
+  background:#fafafa;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#111;
+}
 
-    .container{max-width:900px;width:100%;text-align:center}
+.container{
+  width:100%;
+  max-width:420px;
+  padding:24px;
+}
 
-    .card{max-width:520px;margin:auto;background:white;border-radius:28px;padding:26px;box-shadow:0 25px 60px -20px rgba(0,0,0,.45)}
-    .badge{display:inline-block;background:#fee2e2;color:#b91c1c;padding:4px 10px;border-radius:999px;font-size:.8rem;margin-bottom:10px}
-    .logo{font-size:2.4rem;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .subtitle{color:#6b7280;margin:14px 0}
-    .adresse{font-size:.85rem;color:#9ca3af;margin-bottom:20px}
+.card{
+  background:white;
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.25);
+  text-align:center;
+}
 
-    label{text-align:left;display:block;font-size:.85rem;color:#374151;margin-bottom:6px}
-    input{width:100%;padding:14px 16px;border-radius:999px;border:1px solid #e5e7eb;margin-bottom:14px;font-size:.95rem}
+.logo{
+  font-size:2.4rem;
+  font-weight:700;
+  background:linear-gradient(135deg,#7c2d12,#a16207);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
 
-    .btn-primary{width:100%;padding:16px;border-radius:999px;border:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;font-weight:600;font-size:1.05rem;cursor:pointer}
-    .btn-secondary{margin-top:14px;width:100%;padding:12px;border-radius:999px;border:1px solid #10b981;background:#ecfdf5;color:#047857;font-weight:500;cursor:pointer}
+.subtitle{
+  margin:12px 0 20px;
+  color:#6b7280;
+  font-size:.95rem;
+}
 
-    .info{margin-top:14px;font-size:.8rem;color:#6b7280;background:#f9fafb;padding:12px;border-radius:12px;text-align:left}
+.notice{
+  background:#fefce8;
+  border:1px solid #fde68a;
+  color:#92400e;
+  font-size:.8rem;
+  padding:10px 12px;
+  border-radius:14px;
+  text-align:left;
+  margin-bottom:16px;
+}
 
-    #roulettePage{display:none}
+input{
+  width:100%;
+  padding:14px 16px;
+  border-radius:999px;
+  border:1px solid #e5e7eb;
+  margin-bottom:14px;
+  font-size:.95rem;
+}
 
-    .wheel-container{position:relative;width:320px;height:320px;margin:auto}
-    canvas{border-radius:50%;box-shadow:0 0 0 6px #facc15}
-    .pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);
-      border-left:16px solid transparent;border-right:16px solid transparent;border-bottom:28px solid #facc15}
+button{
+  width:100%;
+  padding:15px;
+  border-radius:999px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  font-size:1rem;
+}
 
-    .result{margin-top:16px;font-size:1.2rem;font-weight:600}
-  </style>
+.primary{
+  background:linear-gradient(135deg,#7c2d12,#a16207);
+  color:white;
+}
+
+.info{
+  margin-top:16px;
+  font-size:.8rem;
+  color:#6b7280;
+  text-align:left;
+}
+
+#wheelPage{display:none}
+
+canvas{
+  margin:20px auto;
+  display:block;
+  border-radius:50%;
+  box-shadow:0 0 0 6px #eab308;
+}
+
+.result{
+  font-size:1.2rem;
+  font-weight:600;
+  margin-top:14px;
+}
+
+.proof{
+  margin-top:12px;
+  font-size:.8rem;
+  color:#92400e;
+  background:#fefce8;
+  border:1px dashed #fde68a;
+  padding:10px 12px;
+  border-radius:14px;
+}
+</style>
 </head>
 
-<body class="step1">
+<body>
+
 <div class="container">
 
 <!-- PAGE AVIS -->
-<div id="avisPage">
-  <div class="card">
-    <div class="badge">⭐ Avis client</div>
-    <div class="logo">Tajinier</div>
-    <p class="subtitle">Merci pour votre visite ! Laissez un avis Google et tentez de gagner 🎁</p>
-    <p class="adresse">49 Bis Av. Henri Vigneau, 33700 Mérignac</p>
+<div id="avisPage" class="card">
+  <div class="logo">Tajinier</div>
 
-    <form id="avisForm">
-      <label>Email (tirage roulette)</label>
-      <input type="email" id="email" placeholder="vous@email.com" required>
-      <button class="btn-primary" type="submit">⭐ Laisser un avis Google</button>
-    </form>
+  <p class="subtitle">
+    Votre avis compte 🍽️<br>
+    Laissez un avis Google et tentez de gagner un cadeau gourmand
+  </p>
 
-    <div class="info">
-      ✔️ Vous serez redirigé vers Google<br>
-      ✔️ Publiez votre avis<br>
-      ✔️ Revenez ici pour jouer 🎰
-    </div>
+  <div class="notice">
+    🎁 Pour récupérer votre gain, merci de présenter votre <strong>avis Google publié</strong> à notre équipe en salle.
+  </div>
 
-    <button class="btn-secondary" id="goToRoulette">
-      🎰 J’ai publié mon avis → Accéder à la roulette
-    </button>
+  <input type="email" id="email" placeholder="Votre email" required>
+
+  <button class="primary" id="goReview">⭐ Laisser un avis Google</button>
+
+  <div class="info">
+    ✔️ Publiez votre avis sur Google<br>
+    ✔️ Revenez automatiquement ici<br>
+    ✔️ La roulette se débloque 🎰
   </div>
 </div>
 
 <!-- PAGE ROULETTE -->
-<div id="roulettePage">
-  <div class="wheel-container">
-    <canvas id="wheel" width="320" height="320"></canvas>
-    <div class="pointer"></div>
-  </div>
+<div id="wheelPage" class="card">
+  <div class="logo">Roulette gourmande</div>
 
-  <button class="btn-primary" id="spinBtn">🎰 Lancer la roulette</button>
+  <canvas id="wheel" width="300" height="300"></canvas>
+
+  <button class="primary" id="spin">🎰 Tourner la roulette</button>
+
   <div id="result" class="result"></div>
+
+  <div class="proof">
+    📱 Présentez votre <strong>avis Google publié</strong> à l’équipe pour récupérer votre gain.
+  </div>
 </div>
 
 </div>
 
 <script>
-const REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA";
-
-document.getElementById("avisForm").addEventListener("submit", e => {
-  e.preventDefault();
-  const email = document.getElementById("email").value.trim();
-  if(!email) return;
-
-  localStorage.setItem("email", email);
-
-  // ✅ ouverture fiable
-  window.open(REVIEW_URL, "_blank");
-
-  alert("⭐ Après avoir publié votre avis Google, revenez ici et cliquez sur la roulette 🎰");
-});
-
-document.getElementById("goToRoulette").addEventListener("click", () => {
-  document.getElementById("avisPage").style.display = "none";
-  document.getElementById("roulettePage").style.display = "block";
-  document.body.className = "step2";
-  initWheel();
-});
+const REVIEW_URL =
+"https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA";
 
 const prizes = [
-  {label:"Canette offerte", prob:0.2},
-  {label:"Dessert maison", prob:0.2},
-  {label:"Thé à la menthe", prob:0.2},
-  {label:"-10% prochaine fois", prob:0.2},
-  {label:"Rien aujourd'hui", prob:0.2},
+  "Thé à la menthe 🍵",
+  "Dessert maison 🍰",
+  "Boisson offerte 🥤",
+  "-10% prochaine visite 🎟️",
+  "Rien aujourd’hui 😅"
 ];
 
-let ctx, angle=0;
+let canSpin = false;
+let ctx, angle = 0;
+
+document.getElementById("goReview").onclick = () => {
+  const email = document.getElementById("email").value;
+  if(!email) return alert("Email requis");
+
+  localStorage.setItem("email", email);
+  window.open(REVIEW_URL, "_blank");
+
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) unlockRoulette();
+  });
+};
+
+function unlockRoulette(){
+  document.getElementById("avisPage").style.display="none";
+  document.getElementById("wheelPage").style.display="block";
+  canSpin = true;
+  initWheel();
+}
 
 function initWheel(){
   const canvas = document.getElementById("wheel");
@@ -123,25 +203,38 @@ function initWheel(){
 }
 
 function drawWheel(){
-  const center=160,radius=150;
+  const center=150, radius=140;
   let start=angle;
-  prizes.forEach(p=>{
-    const a=p.prob*Math.PI*2;
+  prizes.forEach((p,i)=>{
+    const slice=(Math.PI*2)/prizes.length;
     ctx.beginPath();
     ctx.moveTo(center,center);
-    ctx.arc(center,center,radius,start,start+a);
-    ctx.fillStyle="#"+Math.floor(Math.random()*16777215).toString(16);
+    ctx.arc(center,center,radius,start,start+slice);
+    ctx.fillStyle=i%2?"#a16207":"#7c2d12";
     ctx.fill();
-    start+=a;
+
+    ctx.save();
+    ctx.translate(center,center);
+    ctx.rotate(start+slice/2);
+    ctx.fillStyle="white";
+    ctx.font="bold 13px Inter";
+    ctx.fillText(p, radius-20,4);
+    ctx.restore();
+
+    start+=slice;
   });
 }
 
-document.getElementById("spinBtn").addEventListener("click",()=>{
-  angle+=Math.random()*10+10;
+document.getElementById("spin").onclick = () => {
+  if(!canSpin) return;
+  angle += Math.random()*8 + 8;
   drawWheel();
+  const prize = prizes[Math.floor(Math.random()*prizes.length)];
+  document.getElementById("result").textContent =
+    "🎉 Félicitations ! Vous avez gagné : " + prize;
   confetti({particleCount:120,spread:80});
-  document.getElementById("result").textContent="🎉 Merci pour votre avis !";
-});
+};
 </script>
+
 </body>
 </html>
