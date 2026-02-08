@@ -3,44 +3,171 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Roulette gourmande - Tajinier</title>
+  <title>Tajinier Mérignac - Avis & Roulette</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Inter',sans-serif;background:radial-gradient(circle at top,#111827,#020617);min-height:100vh;display:flex;align-items:center;justify-content:center;color:white;padding:20px}
-    .wrapper{max-width:900px;width:100%;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px}
+    body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;color:#111827;transition:background .5s}
+    body.step1{background:radial-gradient(circle at top,#fee2e2,#f8fafc)}
+    body.step2{background:radial-gradient(circle at top,#111827,#020617);color:white}
+    .container{max-width:900px;width:100%;text-align:center}
+    
+    /* PAGE AVIS */
+    #avisPage{display:block}
+    .card{max-width:520px;margin:0 auto;background:white;border-radius:28px;box-shadow:0 25px 60px -20px rgba(0,0,0,.45);padding:28px 22px 26px;text-align:center}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,.1);color:#b91c1c;border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:500;margin-bottom:10px}
+    .logo{font-size:2.4rem;font-weight:700;background:linear-gradient(135deg,#ef4444,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+    .subtitle{color:#6b7280;margin-bottom:16px}
+    .adresse{font-size:.9rem;color:#9ca3af;margin-bottom:24px}
+    .stars{display:flex;justify-content:center;margin-bottom:14px;gap:6px}
+    .star{font-size:1.8rem;cursor:pointer;transition:.15s;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+    .star.selected{color:#facc15;transform:scale(1.1)}
+    textarea{width:100%;min-height:120px;border-radius:16px;border:1px solid #e5e7eb;padding:12px 14px;font-family:inherit;font-size:.95rem;resize:vertical;box-shadow:0 10px 25px rgba(0,0,0,.04);transition:.2s;margin-bottom:10px}
+    textarea:focus{outline:none;border-color:#ef4444;box-shadow:0 18px 40px rgba(239,68,68,.2);transform:translateY(-1px)}
+    input[type="email"]{width:100%;padding:12px 14px;border-radius:999px;border:1px solid #e5e7eb;font-family:inherit;font-size:.9rem;margin-bottom:12px}
+    input[type="email"]:focus{outline:none;border-color:#ef4444;box-shadow:0 10px 25px rgba(239,68,68,.18)}
+    label{font-size:.85rem;font-weight:500;color:#4b5563;display:block;text-align:left;margin-bottom:4px}
+    .btn-primary{width:100%;padding:13px 18px;border-radius:999px;border:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:white;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 20px 35px -18px rgba(239,68,68,.8);transition:.18s;margin-top:6px}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 24px 60px -20px rgba(239,68,68,.9)}
+    .info{margin-top:14px;font-size:.83rem;color:#6b7280;text-align:left}
+    .sep{margin:18px 0 10px;border-top:1px dashed #e5e7eb}
+    .btn-secondary{margin-top:6px;width:100%;padding:10px 16px;border-radius:999px;border:1px solid #10b981;background:rgba(16,185,129,.08);color:#047857;font-size:.9rem;font-weight:500;cursor:pointer}
+    .small{font-size:.78rem;color:#9ca3af;margin-top:8px;text-align:left}
+
+    /* PAGE ROULETTE */
+    #roulettePage{display:none}
+    .wrapper{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px}
     .wheel-container{position:relative;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#facc15,#b45309);display:flex;align-items:center;justify-content:center;box-shadow:0 40px 80px rgba(0,0,0,.8)}
     #wheel{width:320px;height:320px;border-radius:50%;background:#020617;box-shadow:0 0 0 6px #facc15,0 0 30px rgba(250,204,21,.7)}
     .pointer{position:absolute;top:-18px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:18px solid transparent;border-right:18px solid transparent;border-bottom:30px solid #facc15;filter:drop-shadow(0 4px 6px rgba(0,0,0,.8))}
-    .side{max-width:380px}
+    .side{max-width:380px;color:white}
     .title{font-size:2rem;font-weight:700;margin-bottom:6px}
-    .subtitle{color:#e5e7eb;margin-bottom:14px}
-    .chip{display:inline-block;background:linear-gradient(135deg,#f97316,#ea580c);padding:6px 12px;border-radius:999px;font-size:.8rem;margin-bottom:18px}
-    .btn{margin-top:12px;width:100%;padding:14px;border-radius:999px;border:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 25px 40px -18px rgba(34,197,94,.9);transition:.2s}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 30px 60px -20px rgba(34,197,94,1)}
-    .result{margin-top:18px;font-size:1.2rem;font-weight:600;min-height:28px}
-    .small{margin-top:10px;font-size:.85rem;color:#9ca3af}
+    .chip{display:inline-block;background:linear-gradient(135deg,#f97316,#ea580c);padding:6px 12px;border-radius:999px;font-size:.8rem;margin-bottom:18px;color:white}
+    .btn-spin{margin-top:12px;width:100%;padding:14px;border-radius:999px;border:none;background:linear-gradient(135deg,#22c55e,#16a34a);color:white;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 25px 40px -18px rgba(34,197,94,.9);transition:.2s}
+    .btn-spin:hover{transform:translateY(-2px);box-shadow:0 30px 60px -20px rgba(34,197,94,1)}
+    .result{margin-top:18px;font-size:1.2rem;font-weight:600;min-height:28px;color:white}
+    .small-wheel{margin-top:10px;font-size:.85rem;color:#9ca3af}
     @media(max-width:768px){.wrapper{flex-direction:column}}
   </style>
 </head>
-<body>
-  <div class="wrapper">
-    <div class="wheel-container">
-      <canvas id="wheel" width="320" height="320"></canvas>
-      <div class="pointer"></div>
+<body class="step1">
+  <div class="container">
+    
+    <!-- PAGE 1 : AVIS -->
+    <div id="avisPage">
+      <div class="card">
+        <div class="badge">⭐ Avis client • Tajinier Mérignac</div>
+        <div class="logo">Tajinier</div>
+        <p class="subtitle">Dites-nous en quelques secondes ce que vous avez pensé de votre repas au Maroc 🇲🇦</p>
+        <p class="adresse">49 Bis Av. Henri Vigneau, 33700 Mérignac</p>
+
+        <form id="avisForm">
+          <div style="text-align:left;margin-bottom:6px;font-size:.9rem;font-weight:500;color:#374151">Note globale</div>
+          <div class="stars" id="stars">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+
+          <label for="avis">Votre avis (il sera copié pour Google)</label>
+          <textarea id="avis" placeholder="Cuisine, service, ambiance... dites tout 🙂" required></textarea>
+
+          <label for="email">Votre email (pour le tirage à la roulette)</label>
+          <input type="email" id="email" placeholder="vous@example.com" required>
+
+          <button type="submit" class="btn-primary">Copier mon avis & ouvrir Google</button>
+        </form>
+
+        <div class="info">
+          1️⃣ Vous écrivez votre avis ici.<br>
+          2️⃣ Nous le copions automatiquement dans votre presse‑papiers.<br>
+          3️⃣ Google Maps s'ouvre : vous collez l'avis, choisissez vos étoiles et publiez.<br>
+        </div>
+
+        <div class="sep"></div>
+
+        <button class="btn-secondary" id="goToRoulette">
+          🎰 J'ai publié mon avis → accéder à la roulette
+        </button>
+        <div class="small">
+          Vous pouvez accéder à la roulette après avoir réellement publié votre avis sur Google Maps Tajinier.
+        </div>
+      </div>
     </div>
-    <div class="side">
-      <div class="title">Roulette gourmande</div>
-      <div class="subtitle">Merci pour votre avis Google ! Tournez la roue et tentez de gagner un tajine, une boisson ou un dessert maison.</div>
-      <div class="chip">Tajinier • Jeu instantané</div>
-      <button id="spinBtn" class="btn">🎰 Lancer la roulette</button>
-      <div id="result" class="result"></div>
-      <div class="small">Email : <span id="emailDisplay">inconnu</span><br>Présenter ce résultat à l'équipe en salle pour recevoir votre gain.</div>
+
+    <!-- PAGE 2 : ROULETTE -->
+    <div id="roulettePage">
+      <div class="wrapper">
+        <div class="wheel-container">
+          <canvas id="wheel" width="320" height="320"></canvas>
+          <div class="pointer"></div>
+        </div>
+        <div class="side">
+          <div class="title">Roulette gourmande</div>
+          <p class="subtitle">Merci pour votre avis Google ! Tournez la roue et tentez de gagner un tajine, une boisson ou un dessert maison.</p>
+          <div class="chip">Tajinier • Jeu instantané</div>
+          <button id="spinBtn" class="btn-spin">🎰 Lancer la roulette</button>
+          <div id="result" class="result"></div>
+          <div class="small-wheel">Email : <span id="emailDisplay">inconnu</span><br>Présenter ce résultat à l'équipe en salle pour recevoir votre gain.</div>
+        </div>
+      </div>
     </div>
+
   </div>
 
   <script>
+    const reviewUrl = 'https://maps.app.goo.gl/nTkXvFpnU9AbLVj68';
+    
+    // GESTION PAGE AVIS
+    let currentRating = 0;
+    const stars = document.querySelectorAll('.star');
+    stars.forEach(star=>{
+      star.addEventListener('click',()=>{
+        currentRating = parseInt(star.dataset.value);
+        stars.forEach(s=>{
+          s.classList.toggle('selected', parseInt(s.dataset.value) <= currentRating);
+        });
+      });
+    });
+
+    document.getElementById('avisForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const avis = document.getElementById('avis').value.trim();
+      const email = document.getElementById('email').value.trim();
+
+      if(!avis){ alert("Merci d'écrire un petit avis."); return; }
+      if(!/\S+@\S+\.\S+/.test(email)){ alert("Email invalide."); return; }
+      if(currentRating === 0){
+        if(!confirm("Vous n'avez pas sélectionné de nombre d'étoiles. Continuer quand même ?")) return;
+      }
+
+      localStorage.setItem('lastEmail', email);
+      localStorage.setItem('draftReview', avis);
+      localStorage.setItem('draftRating', currentRating.toString());
+
+      try{
+        await navigator.clipboard.writeText(avis);
+        alert("✅ Ton avis est copié. Google va s'ouvrir : colle ton avis, choisis tes étoiles et publie.");
+      }catch(err){
+        alert("Ton avis n'a pas pu être copié automatiquement. Tu pourras le copier/coller à la main.");
+      }
+
+      window.open(reviewUrl, '_blank');
+    });
+
+    // BOUTON ACCEDER ROULETTE
+    document.getElementById('goToRoulette').addEventListener('click', ()=>{
+      document.getElementById('avisPage').style.display = 'none';
+      document.getElementById('roulettePage').style.display = 'block';
+      document.body.classList.remove('step1');
+      document.body.classList.add('step2');
+      initRoulette();
+    });
+
+    // GESTION ROULETTE
     const prizes = [
       { label:'Canette gratuite', color:'#22c55e', prob:0.2 },
       { label:'Bière pression', color:'#f97316', prob:0.15 },
@@ -51,19 +178,22 @@
       { label:'Rien aujourd'hui', color:'#6b7280', prob:0.15 }
     ];
 
-    const lastEmail = localStorage.getItem('lastEmail');
-    if(lastEmail) document.getElementById('emailDisplay').textContent = lastEmail;
+    let canvas, ctx, center, radius, segments, currentAngle = 0, spinning = false;
 
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-    const center = canvas.width / 2;
-    const radius = center - 8;
+    function initRoulette(){
+      const lastEmail = localStorage.getItem('lastEmail');
+      if(lastEmail) document.getElementById('emailDisplay').textContent = lastEmail;
 
-    const totalProb = prizes.reduce((s,p)=>s+p.prob,0);
-    const segments = prizes.map(p=>({...p,angle:(p.prob/totalProb)*Math.PI*2}));
+      canvas = document.getElementById('wheel');
+      ctx = canvas.getContext('2d');
+      center = canvas.width / 2;
+      radius = center - 8;
 
-    let currentAngle = 0;
-    let spinning = false;
+      const totalProb = prizes.reduce((s,p)=>s+p.prob,0);
+      segments = prizes.map(p=>({...p,angle:(p.prob/totalProb)*Math.PI*2}));
+
+      drawWheel();
+    }
 
     function drawWheel(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -135,7 +265,8 @@
       const resEl = document.getElementById('result');
       resEl.textContent = `🎉 Vous avez gagné : ${prize.label}`;
       confetti({particleCount:120,spread:80,origin:{y:0.7}});
-      const entry = `${new Date().toLocaleString('fr-FR')} • ${(lastEmail||'inconnu')} → ${prize.label}`;
+      const lastEmail = localStorage.getItem('lastEmail')||'inconnu';
+      const entry = `${new Date().toLocaleString('fr-FR')} • ${lastEmail} → ${prize.label}`;
       let history = JSON.parse(localStorage.getItem('rouletteLogs')||'[]');
       history.unshift(entry);
       history = history.slice(0,20);
@@ -143,7 +274,6 @@
     }
 
     document.getElementById('spinBtn').addEventListener('click',spin);
-    drawWheel();
   </script>
 </body>
 </html>
