@@ -13,7 +13,6 @@
     body.step2{background:radial-gradient(circle at top,#111827,#020617);color:white}
     .container{max-width:900px;width:100%;text-align:center}
     
-    /* PAGE AVIS */
     #avisPage{display:block}
     .card{max-width:520px;margin:0 auto;background:white;border-radius:28px;box-shadow:0 25px 60px -20px rgba(0,0,0,.45);padding:28px 22px 26px;text-align:center}
     .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,.1);color:#b91c1c;border-radius:999px;padding:4px 10px;font-size:.8rem;font-weight:500;margin-bottom:10px}
@@ -31,7 +30,6 @@
     .btn-secondary:hover{background:rgba(16,185,129,.15);transform:translateY(-1px)}
     .small{font-size:.78rem;color:#9ca3af;margin-top:8px;text-align:left}
 
-    /* PAGE ROULETTE */
     #roulettePage{display:none}
     .wrapper{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:32px}
     .wheel-container{position:relative;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#facc15,#b45309);display:flex;align-items:center;justify-content:center;box-shadow:0 40px 80px rgba(0,0,0,.8)}
@@ -50,7 +48,6 @@
 <body class="step1">
   <div class="container">
     
-    <!-- PAGE 1 : AVIS -->
     <div id="avisPage">
       <div class="card">
         <div class="badge">⭐ Avis client • Tajinier Mérignac</div>
@@ -66,9 +63,9 @@
         </form>
 
         <div class="info">
-          ✅ Vous serez redirigé vers Google pour laisser votre avis.<br>
-          ✅ Une fois publié, revenez ici et cliquez sur "Accéder à la roulette".<br>
-          ✅ Tentez de gagner un tajine, une boisson ou un dessert !
+          ✅ Vous allez être redirigé vers Google pour laisser votre avis.<br>
+          ✅ Après avoir publié, utilisez le bouton retour de votre navigateur.<br>
+          ✅ Puis cliquez sur "Accéder à la roulette" pour tenter de gagner !
         </div>
 
         <div class="sep"></div>
@@ -82,7 +79,6 @@
       </div>
     </div>
 
-    <!-- PAGE 2 : ROULETTE -->
     <div id="roulettePage">
       <div class="wrapper">
         <div class="wheel-container">
@@ -106,7 +102,6 @@
     const PLACE_ID = 'ChIJ5yphIvDZVA0Rykpm0HohmHA';
     const reviewUrl = `https://search.google.com/local/writereview?placeid=${PLACE_ID}`;
     
-    // GESTION PAGE AVIS
     document.getElementById('avisForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -118,13 +113,10 @@
 
       localStorage.setItem('lastEmail', email);
       
-      // Ouvre Google avis DIRECT
-      window.open(reviewUrl, '_blank');
-      
-      alert("✅ Google va s'ouvrir.\n\nLaissez votre avis, puis revenez cliquer sur 'Accéder à la roulette' !");
+      // REDIRECTION DIRECTE (pas de popup)
+      window.location.href = reviewUrl;
     });
 
-    // BOUTON ACCEDER ROULETTE
     document.getElementById('goToRoulette').addEventListener('click', ()=>{
       document.getElementById('avisPage').style.display = 'none';
       document.getElementById('roulettePage').style.display = 'block';
@@ -133,7 +125,6 @@
       initRoulette();
     });
 
-    // GESTION ROULETTE
     const prizes = [
       { label:'Canette gratuite', color:'#22c55e', prob:0.2 },
       { label:'Bière pression', color:'#f97316', prob:0.15 },
