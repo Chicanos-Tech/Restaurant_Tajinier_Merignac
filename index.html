@@ -3,123 +3,99 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roulette Gourmande • Avis Google</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<title>Roulette Gourmande</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --brown:#8b4513;
+  --dark:#6f3b12;
+  --cream:#fffaf4;
+  --accent:#c46a2b;
+}
+
+*{box-sizing:border-box}
 
 body{
-  font-family:Inter,sans-serif;
-  background:radial-gradient(circle at top,#fffaf0,#f8fafc);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#1f2937;
+  margin:0;
+  background:#f2f2f2;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 }
 
 .container{
-  width:100%;
   max-width:420px;
-  padding:20px;
-}
-
-.card{
-  background:#fff;
-  border-radius:32px;
-  padding:28px;
-  box-shadow:0 40px 80px -30px rgba(0,0,0,.25);
+  margin:30px auto;
+  background:var(--cream);
+  border-radius:28px;
+  padding:26px 20px 32px;
   text-align:center;
+  box-shadow:0 25px 45px rgba(0,0,0,.15);
 }
 
-.logo{
-  font-size:2.2rem;
-  font-weight:700;
-  background:linear-gradient(135deg,#7c2d12,#b45309);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+h1{
+  color:var(--brown);
+  margin:0 0 6px;
 }
 
 .subtitle{
-  margin:10px 0 18px;
-  color:#6b7280;
-  font-size:.95rem;
+  color:#666;
+  margin-bottom:20px;
 }
 
-.notice{
-  background:#fff7ed;
-  border:1px solid #fed7aa;
-  color:#9a3412;
+.alert{
+  background:#fff3e6;
+  border:1px solid #ffd3a8;
+  color:#8a4b12;
   padding:14px;
-  border-radius:16px;
-  font-size:.85rem;
-  margin-bottom:18px;
+  border-radius:14px;
+  font-size:14px;
+  margin-bottom:24px;
 }
 
-button{
-  width:100%;
-  padding:16px;
-  border-radius:999px;
-  border:none;
-  background:linear-gradient(135deg,#7c2d12,#b45309);
-  color:white;
-  font-weight:600;
-  font-size:1rem;
-  cursor:pointer;
-  box-shadow:0 10px 25px rgba(180,83,9,.35);
-}
-
-button.secondary{
-  background:#f3f4f6;
-  color:#111827;
-  box-shadow:none;
-  margin-top:12px;
-}
-
-button:active{transform:scale(.97)}
-
-.page{display:none}
-.page.active{display:block}
-
-/* ROULETTE */
 .wheel-wrapper{
   position:relative;
   width:300px;
   height:300px;
-  margin:24px auto;
+  margin:0 auto 26px;
 }
 
 canvas{
   width:300px;
   height:300px;
-  border-radius:50%;
 }
 
 .pointer{
   position:absolute;
-  top:-10px;
+  top:-12px;
   left:50%;
   transform:translateX(-50%);
-  width:0;height:0;
+  width:0;
+  height:0;
   border-left:14px solid transparent;
   border-right:14px solid transparent;
-  border-bottom:26px solid #9a3412;
-  z-index:10;
+  border-bottom:26px solid var(--accent);
 }
 
-.result{
-  margin-top:18px;
-  font-size:1.15rem;
+button{
+  width:100%;
+  padding:16px;
+  font-size:17px;
   font-weight:600;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(180deg,var(--brown),var(--dark));
+  color:white;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
 .footer{
   margin-top:14px;
-  font-size:.8rem;
-  color:#6b7280;
+  font-size:13px;
+  color:#777;
 }
 </style>
 </head>
@@ -127,169 +103,104 @@ canvas{
 <body>
 
 <div class="container">
-  <div class="card">
+  <h1>Roulette Gourmande</h1>
+  <div class="subtitle">Bonne chance 🎁</div>
 
-    <!-- PAGE AVIS -->
-    <div id="pageAvis" class="page active">
-      <div class="logo">Merci pour votre visite 🍽️</div>
-      <p class="subtitle">Laissez un avis Google et tentez de gagner un cadeau gourmand</p>
-
-      <div class="notice">
-        ⭐ Cliquez ci-dessous pour publier votre avis Google.<br>
-        🎰 Une roulette cadeau vous attend juste après.
-      </div>
-
-      <button onclick="leaveReview()">⭐ Laisser un avis Google</button>
-
-      <button class="secondary" onclick="goToWheel()">
-        J’ai déjà publié mon avis →
-      </button>
-    </div>
-
-    <!-- PAGE ROULETTE -->
-    <div id="pageWheel" class="page">
-      <div class="logo">Roulette Gourmande</div>
-      <p class="subtitle">Bonne chance 🎁</p>
-
-      <div class="notice">
-        ⚠️ Pour récupérer votre gain, une
-        <strong>preuve de l’avis Google</strong>
-        sera demandée (capture écran ou email).
-      </div>
-
-      <div class="wheel-wrapper">
-        <div class="pointer"></div>
-        <canvas id="wheel"></canvas>
-      </div>
-
-      <button id="spinBtn">🎰 Tourner la roulette</button>
-
-      <div class="result" id="result"></div>
-
-      <div class="footer">
-        Jeu valable une seule fois par client.
-      </div>
-    </div>
-
+  <div class="alert">
+    ⚠️ Pour récupérer votre gain, une preuve de l’avis Google sera demandée
+    (capture écran ou email).
   </div>
+
+  <div class="wheel-wrapper">
+    <div class="pointer"></div>
+    <canvas id="wheel"></canvas>
+  </div>
+
+  <button id="spinBtn">🎰 Tourner la roulette</button>
+
+  <div class="footer">Jeu valable une seule fois par client.</div>
 </div>
 
 <script>
-/* ---------- NAVIGATION ---------- */
-function leaveReview(){
-  window.open(
-    "https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA",
-    "_blank"
-  );
-}
-
-function goToWheel(){
-  document.getElementById("pageAvis").classList.remove("active");
-  document.getElementById("pageWheel").classList.add("active");
-}
-
-/* ---------- ROULETTE PRO ---------- */
-const prizes = [
-  "Dessert maison 🍰",
-  "Thé à la menthe 🍵",
-  "Boisson offerte 🥤",
-  "-10% prochaine visite 🎟️",
-  "Rien cette fois 😅"
-];
-
-const colors = [
-  "#92400e",
-  "#b45309",
-  "#7c2d12",
-  "#a16207",
-  "#6b7280"
-];
-
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
+const spinBtn = document.getElementById("spinBtn");
+
+const prizes = [
+  "🎟 Prochaine visite",
+  "🍰 Dessert maison",
+  "☕ Café ou thé",
+  "🍟 Portion offerte",
+  "😅 Rien cette fois"
+];
+
+const colors = ["#a85d1a","#8b4513","#c46a2b","#7a3e12","#6f737d"];
 
 const size = 300;
 const dpr = window.devicePixelRatio || 1;
 
-canvas.width = size * dpr;
-canvas.height = size * dpr;
-canvas.style.width = size + "px";
-canvas.style.height = size + "px";
+// Canvas HD Retina
+canvas.width = size * 2 * dpr;
+canvas.height = size * 2 * dpr;
 ctx.scale(dpr, dpr);
+ctx.translate(size, size);
 
-const center = size / 2;
-const radius = center - 10;
 let angle = 0;
 let spinning = false;
 
 function drawWheel(){
-  ctx.clearRect(0,0,size,size);
-  const slice = (Math.PI * 2) / prizes.length;
+  const slice = (2 * Math.PI) / prizes.length;
+  ctx.clearRect(-size, -size, size*2, size*2);
 
-  prizes.forEach((label, i) => {
-    const start = angle + i * slice;
-    const end = start + slice;
-
+  prizes.forEach((text, i) => {
     ctx.beginPath();
-    ctx.moveTo(center, center);
-    ctx.arc(center, center, radius, start, end);
-    ctx.closePath();
     ctx.fillStyle = colors[i];
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,size, angle + i*slice, angle + (i+1)*slice);
     ctx.fill();
 
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
     ctx.save();
-    ctx.translate(center, center);
-    ctx.rotate(start + slice / 2);
-    ctx.textAlign = "right";
+    ctx.rotate(angle + (i + 0.5) * slice);
     ctx.fillStyle = "#fff";
-    ctx.font = "600 14px Inter";
-    ctx.fillText(label, radius - 16, 6);
+    ctx.font = "bold 16px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.textAlign = "right";
+    ctx.fillText(text, size - 18, 6);
     ctx.restore();
   });
 }
 
-function spin(){
+drawWheel();
+
+spinBtn.addEventListener("click", () => {
   if(spinning) return;
   spinning = true;
+  spinBtn.disabled = true;
 
-  const spins = 6;
-  const target = angle + spins * Math.PI * 2 + Math.random() * Math.PI * 2;
-  const duration = 4200;
-  const start = performance.now();
-  const initial = angle;
+  const startAngle = angle;
+  const extraSpins = Math.PI * 8;
+  const randomOffset = Math.random() * Math.PI * 2;
+  const targetAngle = startAngle + extraSpins + randomOffset;
 
-  function animate(now){
-    const progress = Math.min((now - start) / duration, 1);
+  const duration = 3500;
+  const startTime = performance.now();
+
+  function animate(time){
+    const progress = Math.min((time - startTime) / duration, 1);
     const ease = 1 - Math.pow(1 - progress, 3);
-    angle = initial + (target - initial) * ease;
+
+    angle = startAngle + (targetAngle - startAngle) * ease;
     drawWheel();
 
     if(progress < 1){
       requestAnimationFrame(animate);
     } else {
       spinning = false;
-
-      const index = Math.floor(
-        prizes.length -
-        (angle % (Math.PI * 2)) / (Math.PI * 2) * prizes.length
-      ) % prizes.length;
-
-      document.getElementById("result").textContent =
-        "🎉 Vous avez gagné : " + prizes[index];
-
-      confetti({particleCount:120, spread:80, origin:{y:0.7}});
+      spinBtn.disabled = false;
     }
   }
 
   requestAnimationFrame(animate);
-}
-
-document.getElementById("spinBtn").onclick = spin;
-drawWheel();
+});
 </script>
 
 </body>
