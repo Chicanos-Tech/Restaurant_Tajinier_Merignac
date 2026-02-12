@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Tajinier • Avis & Roulette</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --gold:#c8a45b;
@@ -16,9 +13,7 @@
   --neon-blue:#00d4ff;
   --silver:#c0c0c0;
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   background:radial-gradient(circle at top,#1e293b,#020617);
@@ -29,7 +24,6 @@ body{
   align-items:center;
   min-height:100vh;
 }
-
 .container{
   width:420px;
   background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02));
@@ -37,12 +31,9 @@ body{
   border-radius:32px;
   padding:30px 24px 36px;
   text-align:center;
-  box-shadow:
-    0 30px 60px rgba(0,0,0,.6),
-    inset 0 1px 0 rgba(255,255,255,.15);
+  box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.15);
   border:1px solid rgba(255,255,255,0.12);
 }
-
 h1{
   margin:0;
   font-size:28px;
@@ -51,13 +42,11 @@ h1{
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
-
 .subtitle{
   color:#94a3b8;
   margin:8px 0 24px;
   font-size:15px;
 }
-
 input{
   width:100%;
   padding:14px;
@@ -69,9 +58,7 @@ input{
   margin-bottom:16px;
   outline:none;
 }
-
 input::placeholder{color:#94a3b8}
-
 button{
   width:100%;
   padding:16px;
@@ -86,12 +73,10 @@ button{
   box-shadow:0 10px 30px rgba(0,212,255,.35);
   text-shadow:0 1px 2px rgba(0,0,0,.3);
 }
-
 button:hover{
   transform:translateY(-2px);
   box-shadow:0 15px 40px rgba(0,212,255,.55);
 }
-
 .gain-display{
   margin:12px 0 24px;
   padding:20px;
@@ -103,10 +88,8 @@ button:hover{
   color:var(--neon-blue);
   text-shadow:0 0 10px rgba(0,212,255,.5);
 }
-
 .alert{
   margin:18px 0;
-  margin-bottom:45px;
   padding:14px;
   border-radius:16px;
   background:rgba(200,164,91,.12);
@@ -114,44 +97,39 @@ button:hover{
   font-size:14px;
   color:#fcd34d;
 }
-
+.alert-wheel{
+  margin-bottom:60px !important;
+}
 .wheel-wrapper{
   position:relative;
   width:320px;
   height:360px;
-  margin:12px auto 26px;
+  margin:0 auto 26px;
   display:flex;
   flex-direction:column;
   align-items:center;
 }
-
 .wheel-container{
   position:relative;
   width:320px;
   height:320px;
   border-radius:50%;
   background:radial-gradient(circle,rgba(30,41,59,.8),#020617);
-  box-shadow:
-    inset 0 0 60px rgba(0,0,0,.9),
-    0 0 40px rgba(0,212,255,.3),
-    0 0 80px rgba(192,192,192,.1);
+  box-shadow:inset 0 0 60px rgba(0,0,0,.9),0 0 40px rgba(0,212,255,.3),0 0 80px rgba(192,192,192,.1);
   backdrop-filter:blur(10px);
 }
-
 canvas{
   width:320px !important;
   height:320px !important;
   border-radius:50%;
   filter:drop-shadow(0 0 20px rgba(0,212,255,.4));
 }
-
 .pointer{
-  width:30px;
-  height:40px;
+  width:40px;
+  height:50px;
   position:relative;
-  margin-bottom:5px;
+  margin-bottom:8px;
 }
-
 .pointer::before{
   content:'';
   position:absolute;
@@ -160,14 +138,12 @@ canvas{
   transform:translateX(-50%);
   width:0;
   height:0;
-  border-left:15px solid transparent;
-  border-right:15px solid transparent;
-  border-top:30px solid var(--neon-blue);
-  filter:drop-shadow(0 0 12px rgba(0,212,255,1)) drop-shadow(0 4px 8px rgba(0,0,0,.8));
+  border-left:18px solid transparent;
+  border-right:18px solid transparent;
+  border-top:40px solid var(--neon-blue);
+  filter:drop-shadow(0 0 15px rgba(0,212,255,1)) drop-shadow(0 6px 10px rgba(0,0,0,.9));
 }
-
 .hidden{display:none}
-
 .footer{
   margin-top:10px;
   font-size:13px;
@@ -175,53 +151,38 @@ canvas{
 }
 </style>
 </head>
-
 <body>
-
 <div class="container">
-
-  <!-- PAGE AVIS -->
   <div id="avisPage">
     <h1>Tajinier ✨</h1>
     <div class="subtitle">Merci pour votre visite</div>
-
     <input type="email" placeholder="Votre email">
-
     <button id="reviewBtn">⭐ Laisser un avis Google</button>
-
     <div class="alert">
       Après publication de votre avis,<br>
       revenez tourner la roulette 🎁
     </div>
-
     <button id="goRoulette">🎰 Accéder à la roulette</button>
   </div>
 
-  <!-- PAGE ROULETTE -->
   <div id="roulettePage" class="hidden">
     <h1>Roulette Gourmande</h1>
     <div class="subtitle">Bonne chance 🍀</div>
-
     <div class="gain-display" id="gainDisplay" style="display:none;">
       FÉLICITATIONS !<br>Gain : <span id="prizeWon"></span>
     </div>
-
-    <div class="alert">
+    <div class="alert alert-wheel">
       ⚠️ Une preuve de l'avis Google sera demandée
     </div>
-
     <div class="wheel-wrapper">
       <div class="pointer"></div>
       <div class="wheel-container">
         <canvas id="wheel"></canvas>
       </div>
     </div>
-
     <button id="spinBtn">🎰 Tourner la roulette</button>
-
     <div class="footer">Jeu valable une seule fois</div>
   </div>
-
 </div>
 
 <script>
@@ -242,23 +203,8 @@ goRoulette.addEventListener("click",()=>{
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const prizes = [
-  "Repas gratuit",
-  "Boisson off", 
-  "Dessert cadeau",
-  "50€ cash",
-  "Menu duo",
-  "Voucher 20€"
-];
-
-const colors = [
-  "rgba(200,164,91,.9)",
-  "rgba(139,94,52,.9)", 
-  "rgba(212,175,55,.9)",
-  "rgba(161,124,58,.9)",
-  "rgba(71,85,105,.9)",
-  "rgba(0,212,255,.9)"
-];
+const prizes = ["Repas gratuit","Boisson off","Dessert cadeau","50€ cash","Menu duo","Voucher 20€"];
+const colors = ["rgba(200,164,91,.9)","rgba(139,94,52,.9)","rgba(212,175,55,.9)","rgba(161,124,58,.9)","rgba(71,85,105,.9)","rgba(0,212,255,.9)"];
 
 const size = 155;
 canvas.width = 320;
@@ -267,10 +213,6 @@ ctx.translate(160,160);
 
 let angle = 0;
 let spinning = false;
-let currentPrize = "";
-
-// La roulette commence avec le segment 0 en HAUT
-const startOffset = Math.PI / 2; // 90° pour avoir segment 0 en haut au départ
 
 function drawWheel(){
   const slice = (2*Math.PI)/prizes.length;
@@ -286,27 +228,21 @@ function drawWheel(){
   ctx.shadowBlur = 0;
 
   prizes.forEach((text,i)=>{
-    // On dessine depuis le haut (startOffset) pour que segment 0 soit en haut
-    const startAngle = startOffset + angle + i*slice;
-    const endAngle = startOffset + angle + (i+1)*slice;
-    
+    const start = angle + i*slice;
+    const end = angle + (i+1)*slice;
+
     const gradient = ctx.createRadialGradient(0,0,0,0,0,size);
     gradient.addColorStop(0, colors[i]);
     gradient.addColorStop(1, colors[i].replace('.9','.4'));
-    
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,size,startAngle,endAngle);
-    ctx.fillStyle = gradient;
-    ctx.fill();
 
-    ctx.shadowColor = colors[i].replace('.9','1');
-    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.fillStyle = gradient;
+    ctx.moveTo(0,0);
+    ctx.arc(0,0,size,start,end);
     ctx.fill();
-    ctx.shadowBlur = 0;
 
     ctx.save();
-    ctx.rotate(startAngle + slice/2);
+    ctx.rotate(angle + (i+.5)*slice);
     ctx.fillStyle = "rgba(255,255,255,0.95)";
     ctx.strokeStyle = "rgba(0,212,255,0.8)";
     ctx.lineWidth = 1;
@@ -328,45 +264,30 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
   if(spinning) return;
   spinning = true;
 
-  const spins = 8 + Math.random()*3;
-  const randomSlice = Math.floor(Math.random() * prizes.length);
-  const targetAngle = -(Math.PI*2 * spins + (Math.PI*2 / prizes.length) * randomSlice);
-  
-  const duration = 4500 + Math.random()*500;
+  const start = angle;
+  const target = start + Math.PI*12 + Math.random()*Math.PI*2;
+  const duration = 4200;
   const startTime = performance.now();
-  const startAngle = angle;
 
-  function animate(time){
-    const elapsed = time - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    
-    const ease = 1 - Math.pow(1 - progress, 3);
-    
-    angle = startAngle + (targetAngle - startAngle) * ease;
+  function animate(t){
+    const p = Math.min((t-startTime)/duration,1);
+    const ease = 1 - Math.pow(1-p,4);
+
+    angle = start + (target-start)*ease;
     drawWheel();
 
-    if(progress < 1){
+    if(p<1){
       requestAnimationFrame(animate);
     } else {
       spinning = false;
       
-      // MÉTHODE SIMPLE : on calcule quel segment est en haut après rotation
-      const slice = (2*Math.PI) / prizes.length;
+      // Calcul du gain : la flèche pointe en HAUT (angle 0 vers la droite, -PI/2 vers le haut)
+      const slice = (2*Math.PI)/prizes.length;
+      const normalizedAngle = ((-angle - Math.PI/2) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+      const index = Math.floor(normalizedAngle / slice) % prizes.length;
       
-      // Normaliser l'angle entre 0 et 2*PI
-      let normalizedAngle = angle % (2*Math.PI);
-      if(normalizedAngle < 0) normalizedAngle += 2*Math.PI;
-      
-      // Calculer l'index (on tourne dans le sens négatif)
-      let sliceIndex = Math.floor((2*Math.PI - normalizedAngle) / slice) % prizes.length;
-      
-      currentPrize = prizes[sliceIndex];
-      
-      console.log("Angle final:", angle, "Normalisé:", normalizedAngle, "Index:", sliceIndex, "Prix:", currentPrize);
-      
-      document.getElementById("prizeWon").textContent = currentPrize;
+      document.getElementById("prizeWon").textContent = prizes[index];
       document.getElementById("gainDisplay").style.display = "block";
-      
       document.getElementById("spinBtn").textContent = "🎉 Déjà tourné !";
       document.getElementById("spinBtn").disabled = true;
     }
@@ -375,6 +296,5 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
   requestAnimationFrame(animate);
 });
 </script>
-
 </body>
 </html>
