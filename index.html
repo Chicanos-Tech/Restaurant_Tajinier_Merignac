@@ -105,7 +105,8 @@ button:hover{
 }
 
 .alert{
-  margin:18px 0 30px;
+  margin:18px 0;
+  margin-bottom:45px;
   padding:14px;
   border-radius:16px;
   background:rgba(200,164,91,.12);
@@ -268,6 +269,9 @@ let angle = 0;
 let spinning = false;
 let currentPrize = "";
 
+// La roulette commence avec le segment 0 en HAUT
+const startOffset = Math.PI / 2; // 90° pour avoir segment 0 en haut au départ
+
 function drawWheel(){
   const slice = (2*Math.PI)/prizes.length;
   ctx.clearRect(-160,-160,320,320);
@@ -282,8 +286,9 @@ function drawWheel(){
   ctx.shadowBlur = 0;
 
   prizes.forEach((text,i)=>{
-    const startAngle = angle + i*slice;
-    const endAngle = angle + (i+1)*slice;
+    // On dessine depuis le haut (startOffset) pour que segment 0 soit en haut
+    const startAngle = startOffset + angle + i*slice;
+    const endAngle = startOffset + angle + (i+1)*slice;
     
     const gradient = ctx.createRadialGradient(0,0,0,0,0,size);
     gradient.addColorStop(0, colors[i]);
@@ -324,7 +329,9 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
   spinning = true;
 
   const spins = 8 + Math.random()*3;
-  const targetAngle = -(Math.PI*2 * spins + (Math.PI*2 / prizes.length) * Math.floor(Math.random()*prizes.length));
+  const randomSlice = Math.floor(Math.random() * prizes.length);
+  const targetAngle = -(Math.PI*2 * spins + (Math.PI*2 / prizes.length) * randomSlice);
+  
   const duration = 4500 + Math.random()*500;
   const startTime = performance.now();
   const startAngle = angle;
@@ -343,21 +350,19 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
     } else {
       spinning = false;
       
-      // Calcul correct : flèche pointe vers le HAUT (3*PI/2 ou -PI/2)
+      // MÉTHODE SIMPLE : on calcule quel segment est en haut après rotation
       const slice = (2*Math.PI) / prizes.length;
       
-      // Normaliser l'angle actuel (entre 0 et 2*PI)
-      let normalizedAngle = ((angle % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+      // Normaliser l'angle entre 0 et 2*PI
+      let normalizedAngle = angle % (2*Math.PI);
+      if(normalizedAngle < 0) normalizedAngle += 2*Math.PI;
       
-      // La flèche pointe vers le haut = angle 3*PI/2 (270°)
-      // On calcule l'offset depuis le premier segment
-      let adjustedAngle = (normalizedAngle + Math.PI/2) % (2*Math.PI);
-      
-      // Trouver l'index du segment
-      let sliceIndex = Math.floor(adjustedAngle / slice);
-      sliceIndex = (prizes.length - sliceIndex) % prizes.length;
+      // Calculer l'index (on tourne dans le sens négatif)
+      let sliceIndex = Math.floor((2*Math.PI - normalizedAngle) / slice) % prizes.length;
       
       currentPrize = prizes[sliceIndex];
+      
+      console.log("Angle final:", angle, "Normalisé:", normalizedAngle, "Index:", sliceIndex, "Prix:", currentPrize);
       
       document.getElementById("prizeWon").textContent = currentPrize;
       document.getElementById("gainDisplay").style.display = "block";
