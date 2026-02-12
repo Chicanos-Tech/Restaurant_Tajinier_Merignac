@@ -105,7 +105,7 @@ button:hover{
 }
 
 .alert{
-  margin:18px 0;
+  margin:18px 0 30px;
   padding:14px;
   border-radius:16px;
   background:rgba(200,164,91,.12);
@@ -117,8 +117,17 @@ button:hover{
 .wheel-wrapper{
   position:relative;
   width:320px;
-  height:320px;
+  height:360px;
   margin:12px auto 26px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.wheel-container{
+  position:relative;
+  width:320px;
+  height:320px;
   border-radius:50%;
   background:radial-gradient(circle,rgba(30,41,59,.8),#020617);
   box-shadow:
@@ -136,17 +145,24 @@ canvas{
 }
 
 .pointer{
+  width:30px;
+  height:40px;
+  position:relative;
+  margin-bottom:5px;
+}
+
+.pointer::before{
+  content:'';
   position:absolute;
-  top:-35px;
   left:50%;
+  bottom:0;
   transform:translateX(-50%);
   width:0;
   height:0;
   border-left:15px solid transparent;
   border-right:15px solid transparent;
-  border-top:35px solid var(--neon-blue);
-  filter:drop-shadow(0 4px 15px rgba(0,212,255,.9));
-  z-index:10;
+  border-top:30px solid var(--neon-blue);
+  filter:drop-shadow(0 0 12px rgba(0,212,255,1)) drop-shadow(0 4px 8px rgba(0,0,0,.8));
 }
 
 .hidden{display:none}
@@ -195,7 +211,9 @@ canvas{
 
     <div class="wheel-wrapper">
       <div class="pointer"></div>
-      <canvas id="wheel"></canvas>
+      <div class="wheel-container">
+        <canvas id="wheel"></canvas>
+      </div>
     </div>
 
     <button id="spinBtn">🎰 Tourner la roulette</button>
@@ -325,16 +343,19 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
     } else {
       spinning = false;
       
-      // Calcul corrigé : la flèche est en HAUT (angle = -PI/2 ou 3*PI/2)
+      // Calcul correct : flèche pointe vers le HAUT (3*PI/2 ou -PI/2)
       const slice = (2*Math.PI) / prizes.length;
-      const pointerAngle = -Math.PI / 2; // Flèche en haut
       
-      // Normaliser l'angle de rotation
-      let normalizedAngle = ((-angle) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+      // Normaliser l'angle actuel (entre 0 et 2*PI)
+      let normalizedAngle = ((angle % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
       
-      // Calculer quel segment est sous la flèche
-      let sliceIndex = Math.floor((normalizedAngle - pointerAngle + slice/2) / slice);
-      sliceIndex = ((sliceIndex % prizes.length) + prizes.length) % prizes.length;
+      // La flèche pointe vers le haut = angle 3*PI/2 (270°)
+      // On calcule l'offset depuis le premier segment
+      let adjustedAngle = (normalizedAngle + Math.PI/2) % (2*Math.PI);
+      
+      // Trouver l'index du segment
+      let sliceIndex = Math.floor(adjustedAngle / slice);
+      sliceIndex = (prizes.length - sliceIndex) % prizes.length;
       
       currentPrize = prizes[sliceIndex];
       
