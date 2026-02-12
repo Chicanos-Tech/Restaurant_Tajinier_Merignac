@@ -325,9 +325,17 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
     } else {
       spinning = false;
       
-      const normalizedAngle = (angle % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
-      const sliceAngle = Math.PI*2 / prizes.length;
-      const sliceIndex = Math.floor((2*Math.PI - normalizedAngle) / sliceAngle) % prizes.length;
+      // Calcul corrigé : la flèche est en HAUT (angle = -PI/2 ou 3*PI/2)
+      const slice = (2*Math.PI) / prizes.length;
+      const pointerAngle = -Math.PI / 2; // Flèche en haut
+      
+      // Normaliser l'angle de rotation
+      let normalizedAngle = ((-angle) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+      
+      // Calculer quel segment est sous la flèche
+      let sliceIndex = Math.floor((normalizedAngle - pointerAngle + slice/2) / slice);
+      sliceIndex = ((sliceIndex % prizes.length) + prizes.length) % prizes.length;
+      
       currentPrize = prizes[sliceIndex];
       
       document.getElementById("prizeWon").textContent = currentPrize;
