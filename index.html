@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roulette Gourmande</title>
+
+<title>Tajinier • Avis & Roulette</title>
 
 <style>
 :root{
@@ -31,48 +32,17 @@ body{
   box-shadow:0 25px 45px rgba(0,0,0,.15);
 }
 
-h1{
-  color:var(--brown);
-  margin:0 0 6px;
-}
+h1{color:var(--brown);margin:0 0 6px}
 
-.subtitle{
-  color:#666;
-  margin-bottom:20px;
-}
+.subtitle{color:#666;margin-bottom:20px}
 
-.alert{
-  background:#fff3e6;
-  border:1px solid #ffd3a8;
-  color:#8a4b12;
+input{
+  width:100%;
   padding:14px;
   border-radius:14px;
-  font-size:14px;
-  margin-bottom:24px;
-}
-
-.wheel-wrapper{
-  position:relative;
-  width:300px;
-  height:300px;
-  margin:0 auto 26px;
-}
-
-canvas{
-  width:300px;
-  height:300px;
-}
-
-.pointer{
-  position:absolute;
-  top:-12px;
-  left:50%;
-  transform:translateX(-50%);
-  width:0;
-  height:0;
-  border-left:14px solid transparent;
-  border-right:14px solid transparent;
-  border-bottom:26px solid var(--accent);
+  border:1px solid #ddd;
+  margin-bottom:16px;
+  font-size:16px;
 }
 
 button{
@@ -87,41 +57,98 @@ button{
   cursor:pointer;
 }
 
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
+.alert{
+  background:#fff3e6;
+  border:1px solid #ffd3a8;
+  color:#8a4b12;
+  padding:14px;
+  border-radius:14px;
+  font-size:14px;
+  margin:18px 0;
 }
 
-.footer{
-  margin-top:14px;
-  font-size:13px;
-  color:#777;
+.wheel-wrapper{
+  position:relative;
+  width:300px;
+  height:300px;
+  margin:0 auto 26px;
 }
+
+canvas{width:300px;height:300px}
+
+.pointer{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  border-left:14px solid transparent;
+  border-right:14px solid transparent;
+  border-bottom:26px solid var(--accent);
+}
+
+.hidden{display:none}
+
+.footer{margin-top:14px;font-size:13px;color:#777}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-  <h1>Roulette Gourmande</h1>
-  <div class="subtitle">Bonne chance 🎁</div>
 
-  <div class="alert">
-    ⚠️ Pour récupérer votre gain, une preuve de l’avis Google sera demandée
-    (capture écran ou email).
+  <!-- PAGE AVIS -->
+  <div id="avisPage">
+    <h1>Tajinier</h1>
+    <div class="subtitle">Merci pour votre visite ✨</div>
+
+    <input type="email" id="email" placeholder="Votre email">
+
+    <button id="reviewBtn">⭐ Laisser un avis Google</button>
+
+    <div class="alert">
+      Après avoir publié votre avis,<br>
+      revenez ici pour tourner la roulette 🎁
+    </div>
+
+    <button id="goRoulette">🎰 Accéder à la roulette</button>
   </div>
 
-  <div class="wheel-wrapper">
-    <div class="pointer"></div>
-    <canvas id="wheel"></canvas>
+  <!-- PAGE ROULETTE -->
+  <div id="roulettePage" class="hidden">
+    <h1>Roulette Gourmande</h1>
+    <div class="subtitle">Bonne chance 🎁</div>
+
+    <div class="alert">
+      ⚠️ Une preuve de l’avis Google sera demandée
+    </div>
+
+    <div class="wheel-wrapper">
+      <div class="pointer"></div>
+      <canvas id="wheel"></canvas>
+    </div>
+
+    <button id="spinBtn">🎰 Tourner la roulette</button>
+
+    <div class="footer">Jeu valable une seule fois.</div>
   </div>
 
-  <button id="spinBtn">🎰 Tourner la roulette</button>
-
-  <div class="footer">Jeu valable une seule fois par client.</div>
 </div>
 
 <script>
+const reviewBtn = document.getElementById("reviewBtn");
+const goRoulette = document.getElementById("goRoulette");
+const avisPage = document.getElementById("avisPage");
+const roulettePage = document.getElementById("roulettePage");
+
+reviewBtn.addEventListener("click",()=>{
+  window.open("https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA","_blank");
+});
+
+goRoulette.addEventListener("click",()=>{
+  avisPage.classList.add("hidden");
+  roulettePage.classList.remove("hidden");
+});
+
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 const spinBtn = document.getElementById("spinBtn");
@@ -137,66 +164,54 @@ const prizes = [
 const colors = ["#a85d1a","#8b4513","#c46a2b","#7a3e12","#6f737d"];
 
 const size = 300;
-const dpr = window.devicePixelRatio || 1;
-
-// Canvas HD Retina
-canvas.width = size * 2 * dpr;
-canvas.height = size * 2 * dpr;
-ctx.scale(dpr, dpr);
-ctx.translate(size, size);
+canvas.width = size*2;
+canvas.height = size*2;
+ctx.translate(size,size);
 
 let angle = 0;
 let spinning = false;
 
 function drawWheel(){
-  const slice = (2 * Math.PI) / prizes.length;
-  ctx.clearRect(-size, -size, size*2, size*2);
+  const slice = (2*Math.PI)/prizes.length;
+  ctx.clearRect(-size,-size,size*2,size*2);
 
-  prizes.forEach((text, i) => {
+  prizes.forEach((text,i)=>{
     ctx.beginPath();
     ctx.fillStyle = colors[i];
     ctx.moveTo(0,0);
-    ctx.arc(0,0,size, angle + i*slice, angle + (i+1)*slice);
+    ctx.arc(0,0,size,angle+i*slice,angle+(i+1)*slice);
     ctx.fill();
 
     ctx.save();
-    ctx.rotate(angle + (i + 0.5) * slice);
-    ctx.fillStyle = "#fff";
-    ctx.font = "bold 16px -apple-system, BlinkMacSystemFont, sans-serif";
-    ctx.textAlign = "right";
-    ctx.fillText(text, size - 18, 6);
+    ctx.rotate(angle+(i+.5)*slice);
+    ctx.fillStyle="white";
+    ctx.font="bold 16px sans-serif";
+    ctx.textAlign="right";
+    ctx.fillText(text,size-20,5);
     ctx.restore();
   });
 }
 
 drawWheel();
 
-spinBtn.addEventListener("click", () => {
+spinBtn.addEventListener("click",()=>{
   if(spinning) return;
-  spinning = true;
-  spinBtn.disabled = true;
+  spinning=true;
 
-  const startAngle = angle;
-  const extraSpins = Math.PI * 8;
-  const randomOffset = Math.random() * Math.PI * 2;
-  const targetAngle = startAngle + extraSpins + randomOffset;
+  const start=angle;
+  const target=start+Math.PI*8+Math.random()*Math.PI*2;
+  const duration=3500;
+  const startTime=performance.now();
 
-  const duration = 3500;
-  const startTime = performance.now();
+  function animate(t){
+    const p=Math.min((t-startTime)/duration,1);
+    const ease=1-Math.pow(1-p,3);
 
-  function animate(time){
-    const progress = Math.min((time - startTime) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-
-    angle = startAngle + (targetAngle - startAngle) * ease;
+    angle=start+(target-start)*ease;
     drawWheel();
 
-    if(progress < 1){
-      requestAnimationFrame(animate);
-    } else {
-      spinning = false;
-      spinBtn.disabled = false;
-    }
+    if(p<1) requestAnimationFrame(animate);
+    else spinning=false;
   }
 
   requestAnimationFrame(animate);
