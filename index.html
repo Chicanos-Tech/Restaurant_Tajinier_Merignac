@@ -137,15 +137,17 @@ canvas{
 
 .pointer{
   position:absolute;
-  top:-8px;
+  top:50%;
   left:50%;
-  transform:translateX(-50%);
+  transform:translate(-50%, -50%);
   width:0;
   height:0;
-  border-left:12px solid transparent;
-  border-right:12px solid transparent;
-  border-top:20px solid var(--neon-blue);
-  filter:drop-shadow(0 4px 12px rgba(0,212,255,.8));
+  border-left:18px solid transparent;
+  border-right:18px solid transparent;
+  border-bottom:45px solid var(--neon-blue);
+  transform-origin:center bottom;
+  transform:translate(-50%, -120px);
+  filter:drop-shadow(0 4px 15px rgba(0,212,255,.9));
   z-index:10;
 }
 
