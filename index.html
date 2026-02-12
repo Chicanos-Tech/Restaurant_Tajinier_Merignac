@@ -4,134 +4,157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Roulette Gourmande</title>
+<title>Tajinier • Avis & Roulette</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --neon:#38bdf8;
   --gold:#c8a45b;
+  --dark:#0f172a;
+  --glass:rgba(255,255,255,0.12);
+  --neon-blue:#00d4ff;
+  --silver:#c0c0c0;
 }
 
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  background:radial-gradient(circle at top,#0f172a,#020617);
+  background:radial-gradient(circle at top,#1e293b,#020617);
   font-family:'Inter',sans-serif;
   color:white;
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
 }
 
 .container{
-  width:430px;
-  padding:28px 22px 36px;
+  width:420px;
+  background:linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02));
+  backdrop-filter:blur(25px);
   border-radius:32px;
-  background:linear-gradient(145deg,#020617,#0f172a);
-  box-shadow:
-    0 40px 80px rgba(0,0,0,.8),
-    inset 0 1px 0 rgba(255,255,255,.1);
+  padding:30px 24px 36px;
   text-align:center;
+  box-shadow:
+    0 30px 60px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.15);
+  border:1px solid rgba(255,255,255,0.12);
 }
 
 h1{
   margin:0;
   font-size:28px;
   font-weight:700;
-  color:var(--neon);
-  text-shadow:0 0 18px rgba(56,189,248,.8);
+  background:linear-gradient(135deg,#fff,var(--neon-blue));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 .subtitle{
-  margin:6px 0 24px;
   color:#94a3b8;
+  margin:8px 0 24px;
+  font-size:15px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.06);
+  color:white;
+  font-size:15px;
+  margin-bottom:16px;
+  outline:none;
+}
+
+input::placeholder{color:#94a3b8}
+
+button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.25s;
+  background:linear-gradient(135deg,var(--silver),var(--neon-blue));
+  color:black;
+  box-shadow:0 10px 30px rgba(0,212,255,.35);
+  text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 40px rgba(0,212,255,.55);
+}
+
+.gain-display{
+  margin:12px 0 24px;
+  padding:20px;
+  border-radius:24px;
+  background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(192,192,192,.1));
+  border:1px solid rgba(0,212,255,.3);
+  font-size:24px;
+  font-weight:700;
+  color:var(--neon-blue);
+  text-shadow:0 0 10px rgba(0,212,255,.5);
+}
+
+.alert{
+  margin:18px 0;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(200,164,91,.12);
+  border:1px solid rgba(200,164,91,.35);
+  font-size:14px;
+  color:#fcd34d;
 }
 
 .wheel-wrapper{
   position:relative;
   width:320px;
   height:320px;
-  margin:0 auto 26px;
+  margin:12px auto 26px;
   border-radius:50%;
-  background:radial-gradient(circle,#020617,#000);
+  background:radial-gradient(circle,rgba(30,41,59,.8),#020617);
   box-shadow:
-    inset 0 0 50px rgba(0,0,0,1),
-    0 0 40px rgba(56,189,248,.15);
-}
-
-/* Effet métallique externe */
-.wheel-wrapper::before{
-  content:'';
-  position:absolute;
-  inset:-10px;
-  border-radius:50%;
-  background:linear-gradient(145deg,#64748b,#1e293b,#94a3b8);
-  z-index:-1;
+    inset 0 0 60px rgba(0,0,0,.9),
+    0 0 40px rgba(0,212,255,.3),
+    0 0 80px rgba(192,192,192,.1);
+  backdrop-filter:blur(10px);
 }
 
 canvas{
-  width:320px;
-  height:320px;
-}
-
-/* Centre 3D */
-.center-cap{
-  position:absolute;
-  width:70px;
-  height:70px;
+  width:320px !important;
+  height:320px !important;
   border-radius:50%;
-  background:radial-gradient(circle,#e2e8f0,#64748b,#1e293b);
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  box-shadow:
-    inset 0 4px 10px rgba(255,255,255,.4),
-    inset 0 -6px 12px rgba(0,0,0,.8),
-    0 0 25px rgba(56,189,248,.35);
+  filter:drop-shadow(0 0 20px rgba(0,212,255,.4));
 }
 
 .pointer{
   position:absolute;
-  top:-10px;
+  top:-16px;
   left:50%;
   transform:translateX(-50%);
   width:0;
   height:0;
-  border-left:16px solid transparent;
-  border-right:16px solid transparent;
-  border-bottom:30px solid var(--neon);
-  filter:drop-shadow(0 0 10px var(--neon));
+  border-left:20px solid transparent;
+  border-right:20px solid transparent;
+  border-bottom:32px solid var(--neon-blue);
+  filter:drop-shadow(0 4px 12px rgba(0,0,0,.8));
+  z-index:10;
 }
 
-button{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:22px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  background:linear-gradient(145deg,#0ea5e9,#0284c7);
-  color:white;
-  box-shadow:
-    0 10px 30px rgba(56,189,248,.35),
-    inset 0 1px 0 rgba(255,255,255,.25);
-  transition:.25s;
-}
+.hidden{display:none}
 
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 18px 40px rgba(56,189,248,.6);
-}
-
-.notice{
-  margin-top:18px;
-  font-size:14px;
-  color:#cbd5f5;
+.footer{
+  margin-top:10px;
+  font-size:13px;
+  color:#64748b;
 }
 </style>
 </head>
@@ -140,87 +163,140 @@ button:hover{
 
 <div class="container">
 
-  <h1>Roulette Gourmande</h1>
-  <div class="subtitle">Bonne chance 🍀</div>
+  <!-- PAGE AVIS -->
+  <div id="avisPage">
+    <h1>Tajinier ✨</h1>
+    <div class="subtitle">Merci pour votre visite</div>
 
-  <div class="wheel-wrapper">
-    <div class="pointer"></div>
-    <canvas id="wheel"></canvas>
-    <div class="center-cap"></div>
+    <input type="email" placeholder="Votre email">
+
+    <button id="reviewBtn">⭐ Laisser un avis Google</button>
+
+    <div class="alert">
+      Après publication de votre avis,<br>
+      revenez tourner la roulette 🎁
+    </div>
+
+    <button id="goRoulette">🎰 Accéder à la roulette</button>
   </div>
 
-  <button id="spinBtn">🎰 Tourner la roulette</button>
+  <!-- PAGE ROULETTE -->
+  <div id="roulettePage" class="hidden">
+    <h1>Roulette Gourmande</h1>
+    <div class="subtitle">Bonne chance 🍀</div>
 
-  <div class="notice">
-    Une preuve de l’avis Google sera demandée<br>
-    pour récupérer le gain
+    <div class="gain-display" id="gainDisplay" style="display:none;">
+      FÉLICITATIONS !<br>Gain : <span id="prizeWon"></span>
+    </div>
+
+    <div class="alert">
+      ⚠️ Une preuve de l'avis Google sera demandée
+    </div>
+
+    <div class="wheel-wrapper">
+      <div class="pointer"></div>
+      <canvas id="wheel"></canvas>
+    </div>
+
+    <button id="spinBtn">🎰 Tourner la roulette</button>
+
+    <div class="footer">Jeu valable une seule fois</div>
   </div>
 
 </div>
 
 <script>
+const reviewBtn = document.getElementById("reviewBtn");
+const goRoulette = document.getElementById("goRoulette");
+const avisPage = document.getElementById("avisPage");
+const roulettePage = document.getElementById("roulettePage");
+
+reviewBtn.addEventListener("click",()=>{
+  window.open("https://search.google.com/local/writereview?placeid=ChIJ5yphIvDZVA0Rykpm0HohmHA","_blank");
+});
+
+goRoulette.addEventListener("click",()=>{
+  avisPage.classList.add("hidden");
+  roulettePage.classList.remove("hidden");
+});
+
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
 const prizes = [
-  "🎟 Visite offerte",
-  "🍰 Dessert",
-  "☕ Boisson",
-  "🍟 Surprise",
-  "😅 Rien"
+  "Repas gratuit",
+  "Boisson off", 
+  "Dessert cadeau",
+  "50€ cash",
+  "Menu duo",
+  "Voucher 20€"
 ];
 
 const colors = [
-  "#0ea5e9",
-  "#38bdf8",
-  "#0284c7",
-  "#0ea5e9",
-  "#475569"
+  "rgba(200,164,91,.9)",
+  "rgba(139,94,52,.9)", 
+  "rgba(212,175,55,.9)",
+  "rgba(161,124,58,.9)",
+  "rgba(71,85,105,.9)",
+  "rgba(0,212,255,.9)"
 ];
 
-const size = 160;
+const size = 155;
 canvas.width = 320;
 canvas.height = 320;
-
 ctx.translate(160,160);
 
 let angle = 0;
 let spinning = false;
+let currentPrize = "";
 
 function drawWheel(){
   const slice = (2*Math.PI)/prizes.length;
-
   ctx.clearRect(-160,-160,320,320);
 
+  ctx.beginPath();
+  ctx.arc(0,0,size+8,0,2*Math.PI);
+  ctx.strokeStyle = "rgba(0,212,255,.3)";
+  ctx.lineWidth = 4;
+  ctx.shadowColor = "rgba(0,212,255,.6)";
+  ctx.shadowBlur = 20;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
   prizes.forEach((text,i)=>{
-    const start = angle + i*slice;
-    const end = angle + (i+1)*slice;
-
-    const grad = ctx.createLinearGradient(0,-160,0,160);
-    grad.addColorStop(0,colors[i]);
-    grad.addColorStop(1,"#020617");
-
+    const startAngle = angle + i*slice;
+    const endAngle = angle + (i+1)*slice;
+    
+    const gradient = ctx.createRadialGradient(0,0,0,0,0,size);
+    gradient.addColorStop(0, colors[i]);
+    gradient.addColorStop(1, colors[i].replace('.9','.4'));
+    
     ctx.beginPath();
-    ctx.fillStyle = grad;
     ctx.moveTo(0,0);
-    ctx.arc(0,0,size,start,end);
+    ctx.arc(0,0,size,startAngle,endAngle);
+    ctx.fillStyle = gradient;
     ctx.fill();
 
+    ctx.shadowColor = colors[i].replace('.9','1');
+    ctx.shadowBlur = 15;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
     ctx.save();
-    ctx.rotate(angle + (i+.5)*slice);
-    ctx.fillStyle="white";
-    ctx.font="600 15px Inter";
-    ctx.textAlign="right";
-    ctx.fillText(text,size-14,5);
+    ctx.rotate(startAngle + slice/2);
+    ctx.fillStyle = "rgba(255,255,255,0.95)";
+    ctx.strokeStyle = "rgba(0,212,255,0.8)";
+    ctx.lineWidth = 1;
+    ctx.font = "bold 14px Inter";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.shadowColor = "rgba(0,212,255,0.8)";
+    ctx.shadowBlur = 8;
+    ctx.strokeText(text, size-20, 0);
+    ctx.shadowBlur = 4;
+    ctx.fillText(text, size-20, 0);
     ctx.restore();
   });
-
-  /* Glow cercle */
-  ctx.beginPath();
-  ctx.strokeStyle="rgba(56,189,248,.6)";
-  ctx.lineWidth=4;
-  ctx.arc(0,0,size-2,0,Math.PI*2);
-  ctx.stroke();
 }
 
 drawWheel();
@@ -229,20 +305,37 @@ document.getElementById("spinBtn").addEventListener("click",()=>{
   if(spinning) return;
   spinning = true;
 
-  const start = angle;
-  const target = start + Math.PI*12 + Math.random()*Math.PI*2;
-  const duration = 4200;
+  const spins = 8 + Math.random()*3;
+  const targetAngle = -(Math.PI*2 * spins + (Math.PI*2 / prizes.length) * Math.floor(Math.random()*prizes.length));
+  const duration = 4500 + Math.random()*500;
   const startTime = performance.now();
+  const startAngle = angle;
 
-  function animate(t){
-    const p = Math.min((t-startTime)/duration,1);
-    const ease = 1 - Math.pow(1-p,4);
-
-    angle = start + (target-start)*ease;
+  function animate(time){
+    const elapsed = time - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    const ease = 1 - Math.pow(1 - progress, 3);
+    
+    angle = startAngle + (targetAngle - startAngle) * ease;
     drawWheel();
 
-    if(p<1) requestAnimationFrame(animate);
-    else spinning=false;
+    if(progress < 1){
+      requestAnimationFrame(animate);
+    } else {
+      spinning = false;
+      
+      const normalizedAngle = (angle % (Math.PI*2) + Math.PI*2) % (Math.PI*2);
+      const sliceAngle = Math.PI*2 / prizes.length;
+      const sliceIndex = Math.floor((2*Math.PI - normalizedAngle) / sliceAngle) % prizes.length;
+      currentPrize = prizes[sliceIndex];
+      
+      document.getElementById("prizeWon").textContent = currentPrize;
+      document.getElementById("gainDisplay").style.display = "block";
+      
+      document.getElementById("spinBtn").textContent = "🎉 Déjà tourné !";
+      document.getElementById("spinBtn").disabled = true;
+    }
   }
 
   requestAnimationFrame(animate);
